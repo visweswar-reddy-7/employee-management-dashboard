@@ -31,7 +31,7 @@ export const DEFAULT_CREDENTIALS = {
   PASSWORD: 'password123'
 };
 
-// UI Text Constants
+  // UI Text Constants
 export const UI_TEXT = {
   // Dashboard
   DASHBOARD_TITLE: 'Employee Dashboard',
@@ -43,6 +43,12 @@ export const UI_TEXT = {
   NO_RECORDS_FOUND: 'No records found.',
   DELETE_CONFIRM: 'Delete this record?',
   PRINT_LIST: 'Print List',
+  PRINT_EMPLOYEE: 'Print Employee',
+  EDIT_EMPLOYEE: 'Edit Employee',
+  DELETE_EMPLOYEE: 'Delete Employee',
+  ADD_EMPLOYEE_TOOLTIP: 'Add New Employee',
+  LOGOUT_TOOLTIP: 'Logout',
+  STATUS_TOGGLE: 'Toggle Status',
 
   // Table Headers
   EMPLOYEE_ID: 'Employee ID',

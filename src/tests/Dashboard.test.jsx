@@ -1,9 +1,8 @@
-import { render, screen, fireEvent, cleanup } from '@testing-library/react';
+import { render, screen, fireEvent } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
 import { AuthProvider } from '../context/AuthContext';
 import Dashboard from '../pages/Dashboard';
-import { describe, it, expect, beforeEach, vi, afterEach } from 'vitest';
-import '@testing-library/jest-dom';
+import { vi } from 'vitest';
 
 const renderDashboard = () => render(
   <BrowserRouter>
@@ -14,10 +13,10 @@ const renderDashboard = () => render(
 );
 
 describe('Dashboard Component', () => {
-  // Use vi.spyOn to track window.print calls
-  const printSpy = vi.spyOn(window, 'print').mockImplementation(() => {});
+  let printSpy;
 
   beforeEach(() => {
+    printSpy = vi.spyOn(window, 'print').mockImplementation(() => {});
     localStorage.clear();
     const mockEmployees = [
       { id: '1', name: 'Alice Smith', gender: 'Female', state: 'New York', status: 'Active' },
@@ -27,14 +26,15 @@ describe('Dashboard Component', () => {
   });
 
   afterEach(() => {
-    cleanup();
-    vi.clearAllMocks(); // This clears the printSpy call history between tests
+    vi.clearAllMocks();
   });
 
   it('displays the correct total employee count in stats', () => {
     renderDashboard();
-    const totalStat = screen.getByText('2');
-    expect(totalStat).toBeInTheDocument();
+    // Find the stats card with blue border (Total Employees)
+    const totalEmployeesCard = screen.getByText('Total Employees').closest('[class*="border-l-blue"]');
+    const countElement = totalEmployeesCard.querySelector('.text-3xl');
+    expect(countElement).toHaveTextContent('2');
   });
 
   it('filters results based on search input', () => {

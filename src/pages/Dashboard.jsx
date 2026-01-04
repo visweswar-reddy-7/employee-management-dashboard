@@ -27,7 +27,7 @@ export default function Dashboard() {
     <div className="min-h-screen p-6 max-w-7xl mx-auto">
       <div className="flex justify-between items-center mb-8 no-print">
         <h1 className="text-3xl font-bold text-slate-800">{UI_TEXT.DASHBOARD_TITLE}</h1>
-        <button onClick={logout} className="flex items-center gap-2 text-slate-500 hover:text-red-600 font-medium transition"><LogOut size={18}/>{UI_TEXT.LOGOUT}</button>
+        <button onClick={logout} title={UI_TEXT.LOGOUT_TOOLTIP} className="flex items-center gap-2 text-slate-500 hover:text-red-600 font-medium transition"><LogOut size={18}/>{UI_TEXT.LOGOUT}</button>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8 no-print">
@@ -57,7 +57,7 @@ export default function Dashboard() {
           <option value={FILTER_OPTIONS.ALL}>{FILTER_OPTIONS.ALL_STATUS}</option><option>Active</option><option>Inactive</option>
         </select>
         <button title={UI_TEXT.PRINT_LIST} aria-label={UI_TEXT.PRINT_LIST} onClick={() => window.print()} className="bg-white border px-4 py-2 rounded-xl hover:bg-slate-50"><Printer size={20}/></button>
-        <button onClick={() => { setEditingEmp(null); setFormOpen(true); }} className="bg-brand text-white px-6 py-2 rounded-xl font-bold hover:bg-blue-700 shadow-lg">{UI_TEXT.ADD_EMPLOYEE_BUTTON}</button>
+        <button onClick={() => { setEditingEmp(null); setFormOpen(true); }} title={UI_TEXT.ADD_EMPLOYEE_TOOLTIP} className="bg-brand text-white px-6 py-2 rounded-xl font-bold hover:bg-blue-700 shadow-lg">{UI_TEXT.ADD_EMPLOYEE_BUTTON}</button>
       </div>
 
       <div className="bg-white rounded-2xl shadow-sm border overflow-hidden print-area">
@@ -77,23 +77,26 @@ export default function Dashboard() {
                 <td className="p-4">{emp.dob}</td>
                 <td className="p-4">{emp.state}</td>
                 <td className="p-4">
-                  <label className="inline-flex items-center cursor-pointer">
-                    <input type="checkbox" checked={emp.status === EMPLOYEE_STATUS.ACTIVE} onChange={() => {
-                      const newStatus = emp.status === EMPLOYEE_STATUS.ACTIVE ? EMPLOYEE_STATUS.INACTIVE : EMPLOYEE_STATUS.ACTIVE;
-                      setEmployees(employees.map(e => e.id === emp.id ? { ...e, status: newStatus } : e));
-                    }} className="sr-only peer" />
-                    <div className="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
-                  </label>
+                  <div className="flex flex-col">
+                    <label title={UI_TEXT.STATUS_TOGGLE} className="inline-flex items-center cursor-pointer no-print">
+                      <input type="checkbox" checked={emp.status === EMPLOYEE_STATUS.ACTIVE} onChange={() => {
+                        const newStatus = emp.status === EMPLOYEE_STATUS.ACTIVE ? EMPLOYEE_STATUS.INACTIVE : EMPLOYEE_STATUS.ACTIVE;
+                        setEmployees(employees.map(e => e.id === emp.id ? { ...e, status: newStatus } : e));
+                      }} className="sr-only peer" />
+                      <div className="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+                    </label>
+                    <span className="text-xs text-slate-500 mt-1">{emp.status}</span>
+                  </div>
                 </td>
                 <td className="p-4 text-right no-print">
-                  <button onClick={() => {
+                  <button title={UI_TEXT.PRINT_EMPLOYEE} onClick={() => {
                     const printWindow = window.open('', '_blank');
                     printWindow.document.write(`<html><head><title>Print Employee</title><style>body{font-family:Arial,sans-serif;margin:20px;} img{border-radius:50%;}</style></head><body><h1>${emp.name}</h1><p><strong>ID:</strong> ${emp.id}</p><p><strong>Gender:</strong> ${emp.gender}</p><p><strong>DOB:</strong> ${emp.dob}</p><p><strong>State:</strong> ${emp.state}</p><p><strong>Status:</strong> ${emp.status}</p><img src='${emp.image || PLACEHOLDER_IMAGE}' style='width:100px;height:100px;object-fit:cover;border-radius:50%;'/></body></html>`);
                     printWindow.document.close();
                     printWindow.print();
                   }} className="text-gray-600 mr-3"><Printer size={18}/></button>
-                  <button onClick={() => { setEditingEmp(emp); setFormOpen(true); }} className="text-brand mr-3"><Edit size={18}/></button>
-                  <button onClick={() => handleDelete(emp.id)} className="text-red-600"><Trash2 size={18}/></button>
+                  <button title={UI_TEXT.EDIT_EMPLOYEE} onClick={() => { setEditingEmp(emp); setFormOpen(true); }} className="text-brand mr-3"><Edit size={18}/></button>
+                  <button title={UI_TEXT.DELETE_EMPLOYEE} onClick={() => handleDelete(emp.id)} className="text-red-600"><Trash2 size={18}/></button>
                 </td>
               </tr>
             ))}
