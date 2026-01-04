@@ -64,17 +64,34 @@ export default function Dashboard() {
         <table className="w-full text-left">
           <thead className="bg-slate-50 border-b">
             <tr>
-              <th className="p-4">{UI_TEXT.PROFILE}</th><th className="p-4">{UI_TEXT.NAME}</th><th className="p-4">{UI_TEXT.GENDER}</th><th className="p-4">{UI_TEXT.STATE}</th><th className="p-4">{UI_TEXT.STATUS}</th><th className="p-4 text-right no-print">{UI_TEXT.ACTIONS}</th>
+              <th className="p-4">{UI_TEXT.EMPLOYEE_ID}</th><th className="p-4">{UI_TEXT.PROFILE}</th><th className="p-4">{UI_TEXT.NAME}</th><th className="p-4">{UI_TEXT.GENDER}</th><th className="p-4">{UI_TEXT.DOB}</th><th className="p-4">{UI_TEXT.STATE}</th><th className="p-4">{UI_TEXT.STATUS}</th><th className="p-4 text-right no-print">{UI_TEXT.ACTIONS}</th>
             </tr>
           </thead>
           <tbody className="divide-y">
             {filtered.map(emp => (
               <tr key={emp.id} className="hover:bg-slate-50 transition">
+                <td className="p-4 font-mono text-sm">{emp.id}</td>
                 <td className="p-4"><img src={emp.image || PLACEHOLDER_IMAGE} className="w-10 h-10 rounded-full border object-cover" /></td>
                 <td className="p-4 font-medium">{emp.name}</td>
-                <td className="p-4">{emp.gender}</td><td className="p-4">{emp.state}</td>
-                <td className="p-4"><span className={`px-3 py-1 rounded-full text-xs font-bold ${emp.status === EMPLOYEE_STATUS.ACTIVE ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>{emp.status}</span></td>
+                <td className="p-4">{emp.gender}</td>
+                <td className="p-4">{emp.dob}</td>
+                <td className="p-4">{emp.state}</td>
+                <td className="p-4">
+                  <label className="inline-flex items-center cursor-pointer">
+                    <input type="checkbox" checked={emp.status === EMPLOYEE_STATUS.ACTIVE} onChange={() => {
+                      const newStatus = emp.status === EMPLOYEE_STATUS.ACTIVE ? EMPLOYEE_STATUS.INACTIVE : EMPLOYEE_STATUS.ACTIVE;
+                      setEmployees(employees.map(e => e.id === emp.id ? { ...e, status: newStatus } : e));
+                    }} className="sr-only peer" />
+                    <div className="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+                  </label>
+                </td>
                 <td className="p-4 text-right no-print">
+                  <button onClick={() => {
+                    const printWindow = window.open('', '_blank');
+                    printWindow.document.write(`<html><head><title>Print Employee</title><style>body{font-family:Arial,sans-serif;margin:20px;} img{border-radius:50%;}</style></head><body><h1>${emp.name}</h1><p><strong>ID:</strong> ${emp.id}</p><p><strong>Gender:</strong> ${emp.gender}</p><p><strong>DOB:</strong> ${emp.dob}</p><p><strong>State:</strong> ${emp.state}</p><p><strong>Status:</strong> ${emp.status}</p><img src='${emp.image || PLACEHOLDER_IMAGE}' style='width:100px;height:100px;object-fit:cover;border-radius:50%;'/></body></html>`);
+                    printWindow.document.close();
+                    printWindow.print();
+                  }} className="text-gray-600 mr-3"><Printer size={18}/></button>
                   <button onClick={() => { setEditingEmp(emp); setFormOpen(true); }} className="text-brand mr-3"><Edit size={18}/></button>
                   <button onClick={() => handleDelete(emp.id)} className="text-red-600"><Trash2 size={18}/></button>
                 </td>

@@ -45,9 +45,11 @@ export const UI_TEXT = {
   PRINT_LIST: 'Print List',
 
   // Table Headers
+  EMPLOYEE_ID: 'Employee ID',
   PROFILE: 'Profile',
   NAME: 'Name',
   GENDER: 'Gender',
+  DOB: 'DOB',
   STATE: 'State',
   STATUS: 'Status',
   ACTIONS: 'Actions',
